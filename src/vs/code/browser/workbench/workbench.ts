@@ -488,7 +488,7 @@ function doCreateUri(path: string, queryValues: Map<string, string>): URI {
 			query += `${prefix}${key}=${encodeURIComponent(value)}`;
 		});
 	}
-
+	path = (window.location.pathname + "/" + path).replace(/\/\/+/g, "/")
 	return URI.parse(window.location.href).with({ path, query });
 }
 
@@ -502,13 +502,14 @@ function doCreateUri(path: string, queryValues: Map<string, string>): URI {
 	}
 	const originalConfig: IWorkbenchConstructionOptions & { folderUri?: UriComponents; workspaceUri?: UriComponents; callbackRoute: string } = JSON.parse(configElementAttribute);
 	const config: IWorkbenchConstructionOptions & { folderUri?: UriComponents; workspaceUri?: UriComponents; callbackRoute: string } = {
-		remoteAuthority: window.location.host,
+		remoteAuthority: location.host,
 		developmentOptions: originalConfig.developmentOptions,
 		settingsSyncOptions: originalConfig.settingsSyncOptions,
 		folderUri: originalConfig.folderUri,
 		workspaceUri: originalConfig.workspaceUri,
 		callbackRoute: originalConfig.callbackRoute
 	};
+	// const config: IWorkbenchConstructionOptions & { folderUri?: UriComponents; workspaceUri?: UriComponents; callbackRoute: string } = { ...JSON.parse(configElementAttribute), remoteAuthority: location.host }
 
 	// Create workbench
 	create(document.body, {
