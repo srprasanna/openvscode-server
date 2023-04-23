@@ -10,7 +10,7 @@ import { IConnectCallback, ISocketFactory } from 'vs/platform/remote/common/remo
 export const nodeSocketFactory = new class implements ISocketFactory {
 	connect(host: string, port: number, path: string, query: string, debugLabel: string, callback: IConnectCallback): void {
 		const errorListener = (err: any) => callback(err, undefined);
-
+		path = (window.location.pathname + "/" + path).replace(/\/\/+/g, "/");
 		const socket = net.createConnection({ host: host, port: port }, () => {
 			socket.removeListener('error', errorListener);
 
@@ -20,7 +20,6 @@ export const nodeSocketFactory = new class implements ISocketFactory {
 				buffer[i] = Math.round(Math.random() * 256);
 			}
 			const nonce = buffer.toString('base64');
-			path = (window.location.pathname + "/" + path).replace(/\/\/+/g, "/")
 			const headers = [
 				`GET ws://${/:/.test(host) ? `[${host}]` : host}:${port}${path}?${query}&skipWebSocketFrames=true HTTP/1.1`,
 				`Connection: Upgrade`,

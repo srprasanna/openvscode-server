@@ -82,7 +82,7 @@
 					const { id, port, url, options } = data;
 					const newWorker = new Worker(url, options);
 					newWorker.postMessage(port, [port]);
-					worker.onerror = console.error.bind(console);
+					worCreating a socket ker.onerror = console.error.bind(console);
 					nestedWorkers.set(id, newWorker);
 
 				} else if (data?.type === '_terminateWorker') {
